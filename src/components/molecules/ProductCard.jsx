@@ -1,0 +1,114 @@
+import React from "react"
+import { useNavigate } from "react-router-dom"
+import ApperIcon from "@/components/ApperIcon"
+import Badge from "@/components/atoms/Badge"
+import Button from "@/components/atoms/Button"
+import useCart from "@/hooks/useCart"
+import useWishlist from "@/hooks/useWishlist"
+
+const ProductCard = ({ product }) => {
+  const navigate = useNavigate()
+  const { addToCart } = useCart()
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+
+  const handleProductClick = () => {
+    navigate(`/product/${product.Id}`)
+  }
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation()
+    addToCart(product, product.sizes[0], product.colors[0], 1)
+  }
+
+  const handleWishlistToggle = (e) => {
+    e.stopPropagation()
+    if (isInWishlist(product.Id)) {
+      removeFromWishlist(product.Id.toString())
+    } else {
+      addToWishlist(product)
+    }
+  }
+
+  const discount = product.salePrice 
+    ? Math.round((1 - product.salePrice / product.price) * 100)
+    : 0
+
+  return (
+    <div 
+      className="bg-surface rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+      onClick={handleProductClick}
+    >
+      <div className="relative aspect-[3/4] overflow-hidden">
+        <img
+          src={product.images[0]}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            e.target.src = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=600&fit=crop"
+          }}
+        />
+        
+        {product.salePrice && (
+          <Badge 
+            variant="sale" 
+            size="small" 
+            className="absolute top-2 left-2 font-bold"
+          >
+            {discount}% OFF
+          </Badge>
+        )}
+        
+        <button
+          onClick={handleWishlistToggle}
+          className="absolute top-2 right-2 p-2 bg-surface/80 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-surface"
+        >
+          <ApperIcon 
+            name="Heart" 
+            size={16} 
+            className={isInWishlist(product.Id) ? "text-accent fill-accent" : "text-gray-500"}
+          />
+        </button>
+      </div>
+
+      <div className="p-4 space-y-3">
+        <div>
+          <p className="text-xs text-secondary uppercase tracking-wide font-medium">
+            {product.brand}
+          </p>
+          <h3 className="text-sm font-medium text-primary line-clamp-2 mt-1">
+            {product.name}
+          </h3>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {product.salePrice ? (
+            <>
+              <span className="text-lg font-bold text-primary">
+                ₹{product.salePrice.toLocaleString()}
+              </span>
+              <span className="text-sm text-secondary line-through">
+                ₹{product.price.toLocaleString()}
+              </span>
+            </>
+          ) : (
+            <span className="text-lg font-bold text-primary">
+              ₹{product.price.toLocaleString()}
+            </span>
+          )}
+        </div>
+
+        <Button
+          onClick={handleAddToCart}
+          variant="primary"
+          size="small"
+          className="w-full"
+          icon="ShoppingBag"
+        >
+          Add to Cart
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export default ProductCard
