@@ -1,5 +1,6 @@
+import authService from "@/services/api/authService";
+
 // Address service using localStorage for persistence
-import authService from "@/services/api/authService"
 
 const STORAGE_KEY = "user_addresses"
 
