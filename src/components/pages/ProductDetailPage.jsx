@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
-import productService from "@/services/api/productService"
-import ApperIcon from "@/components/ApperIcon"
-import Button from "@/components/atoms/Button"
-import Badge from "@/components/atoms/Badge"
-import Loading from "@/components/ui/Loading"
-import Error from "@/components/ui/Error"
-import useCart from "@/hooks/useCart"
-import useWishlist from "@/hooks/useWishlist"
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import StarRating from "@/components/atoms/StarRating";
+import ReviewsSection from "@/components/organisms/ReviewsSection";
+import productService from "@/services/api/productService";
+import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
+import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
+import useCart from "@/hooks/useCart";
+import useWishlist from "@/hooks/useWishlist";
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
@@ -153,13 +155,23 @@ const ProductDetailPage = () => {
 
         {/* Product Info */}
         <div className="space-y-6">
-          <div>
+<div>
             <p className="text-sm text-secondary uppercase tracking-wide font-medium">
               {product.brand}
             </p>
             <h1 className="text-3xl font-bold text-primary mt-2 mb-4">
               {product.name}
             </h1>
+            
+            {/* Rating Display */}
+            {product.rating > 0 && (
+              <div className="flex items-center gap-2 mb-4">
+                <StarRating rating={product.rating} size={18} />
+                <span className="text-sm text-secondary">
+                  {product.rating.toFixed(1)} ({product.reviewCount} reviews)
+                </span>
+              </div>
+            )}
             
             <div className="flex items-center gap-4 mb-4">
               {product.salePrice ? (
@@ -307,9 +319,11 @@ const ProductDetailPage = () => {
                 <span className="text-secondary">Authentic Products</span>
               </div>
             </div>
-          </div>
+</div>
         </div>
       </div>
+      {/* Reviews Section */}
+      <ReviewsSection productId={productId} />
     </div>
   )
 }

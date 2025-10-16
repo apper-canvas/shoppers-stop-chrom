@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom"
 import ApperIcon from "@/components/ApperIcon"
 import Badge from "@/components/atoms/Badge"
 import Button from "@/components/atoms/Button"
+import StarRating from "@/components/atoms/StarRating"
 import ProductQuickViewModal from "@/components/atoms/ProductQuickViewModal"
 import useCart from "@/hooks/useCart"
 import useWishlist from "@/hooks/useWishlist"
+import { cn } from "@/utils/cn"
 const ProductCard = ({ product }) => {
   const navigate = useNavigate()
 const [showQuickView, setShowQuickView] = useState(false)
@@ -85,7 +87,7 @@ const [showQuickView, setShowQuickView] = useState(false)
         </button>
       </div>
 
-      <div className="p-4 space-y-3">
+<div className="p-4 space-y-3">
         <div>
           <p className="text-xs text-secondary uppercase tracking-wide font-medium">
             {product.brand}
@@ -93,6 +95,16 @@ const [showQuickView, setShowQuickView] = useState(false)
           <h3 className="text-sm font-medium text-primary line-clamp-2 mt-1">
             {product.name}
           </h3>
+          
+          {/* Rating Display */}
+          {product.rating > 0 && (
+            <div className="flex items-center gap-1 mt-1">
+              <StarRating rating={product.rating} size={12} />
+              <span className="text-xs text-secondary">
+                ({product.reviewCount})
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2">

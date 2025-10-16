@@ -1,8 +1,23 @@
-import productsData from "@/services/mockData/products.json"
+import productsData from "@/services/mockData/products.json";
+import React from "react";
 
 class ProductService {
   constructor() {
     this.products = [...productsData]
+  }
+
+  calculateAverageRating(reviews) {
+    if (!reviews || reviews.length === 0) {
+      return { average: 0, count: 0 }
+    }
+    
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0)
+    const average = sum / reviews.length
+    
+    return {
+      average: Math.round(average * 10) / 10,
+      count: reviews.length
+    }
   }
 
   async getAll() {
@@ -113,7 +128,7 @@ class ProductService {
     return true
   }
 
-  delay(ms) {
+delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 }
