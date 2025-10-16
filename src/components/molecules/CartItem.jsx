@@ -1,8 +1,9 @@
-import React from "react"
-import ApperIcon from "@/components/ApperIcon"
-import Button from "@/components/atoms/Button"
+import React from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
 
-const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
+const CartItem = ({ item, onUpdateQuantity, onRemove, onMoveToWishlist, onSaveForLater }) => {
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity >= 0) {
       onUpdateQuantity(item.productId, item.size, item.color, newQuantity)
@@ -32,9 +33,10 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
               {item.name}
             </h3>
           </div>
-          <button
+<button
             onClick={() => onRemove(item.productId, item.size, item.color)}
             className="text-gray-400 hover:text-accent transition-colors p-1"
+            title="Remove from cart"
           >
             <ApperIcon name="Trash2" size={16} />
           </button>
@@ -64,11 +66,32 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
             </button>
           </div>
 
-          <div className="text-right">
+<div className="text-right">
             <p className="text-lg font-bold text-primary">
               ₹{(item.price * item.quantity).toLocaleString()}
             </p>
           </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 pt-3 border-t">
+          <button
+            onClick={() => onMoveToWishlist(item)}
+            className="flex items-center gap-1.5 text-xs text-secondary hover:text-accent transition-colors"
+          >
+            <ApperIcon name="Heart" size={14} />
+            <span>Move to Wishlist</span>
+          </button>
+          
+          <span className="text-gray-300">|</span>
+          
+          <button
+            onClick={() => onSaveForLater(item.productId, item.size, item.color)}
+            className="flex items-center gap-1.5 text-xs text-secondary hover:text-primary transition-colors"
+          >
+            <ApperIcon name="Bookmark" size={14} />
+            <span>Save for Later</span>
+          </button>
         </div>
       </div>
     </div>
