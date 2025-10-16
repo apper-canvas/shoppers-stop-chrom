@@ -1,57 +1,49 @@
-import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import useCart from "@/hooks/useCart"
-import authService from "@/services/api/authService"
-import LoginStep from "@/components/pages/LoginStep"
-import AddressStep from "@/components/pages/AddressStep"
-import PaymentStep from "@/components/pages/PaymentStep"
-import Loading from "@/components/ui/Loading"
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import LoginStep from "@/components/pages/LoginStep";
+import AddressStep from "@/components/pages/AddressStep";
+import PaymentStep from "@/components/pages/PaymentStep";
+import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+
 const CheckoutPage = () => {
-  const navigate = useNavigate()
-  const { cartItems, isLoading } = useCart()
-  
-const [currentStep, setCurrentStep] = useState(1) // 1 = Login, 2 = Address, 3 = Payment
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
+  const { isAuthenticated } = useSelector((state) => state.user);
+  const { items: cartItems, isLoading } = useSelector((state) => state.cart || { items: [], isLoading: false });
 
   useEffect(() => {
-    // Check authentication status on mount
-    const checkAuth = async () => {
-      const authenticated = await authService.isAuthenticated()
-      setIsAuthenticated(authenticated)
-      if (authenticated) {
-        setCurrentStep(2)
-      }
+    // Check authentication status on mount from Redux
+    if (isAuthenticated) {
+      setCurrentStep(2);
     }
-    checkAuth()
-  }, [])
+  }, [isAuthenticated]);
 
   const handleLoginSuccess = () => {
-setIsAuthenticated(true)
-    setCurrentStep(2)
-  }
+    setCurrentStep(2);
+  };
 
   const handleAddressContinue = () => {
-    setCurrentStep(3)
-  }
+    setCurrentStep(3);
+  };
 
   const handleBackToLogin = () => {
-    setCurrentStep(1)
-  }
+    setCurrentStep(1);
+  };
 
   const handleBackToAddress = () => {
-    setCurrentStep(2)
-  }
+    setCurrentStep(2);
+  };
 
-
-if (isLoading) {
-    return <Loading />
+  if (isLoading) {
+    return <Loading />;
   }
 
   if (cartItems.length === 0) {
-    navigate("/cart")
-    return null
+    navigate("/cart");
+    return null;
   }
-
 return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
