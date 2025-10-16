@@ -7,7 +7,7 @@ import addressService from "@/services/api/addressService"
 import useCart from "@/hooks/useCart"
 import { toast } from "react-toastify"
 
-const AddressStep = ({ onBack }) => {
+const AddressStep = ({ onBack, onContinue }) => {
   const navigate = useNavigate()
   const { cartItems, getCartTotal, getCartItemsCount, clearCart } = useCart()
   
@@ -191,7 +191,7 @@ const AddressStep = ({ onBack }) => {
     setErrors({})
   }
 
-  const handlePlaceOrder = () => {
+const handleContinue = () => {
     if (!selectedAddressId) {
       toast.error("Please select a delivery address")
       return
@@ -203,9 +203,11 @@ const AddressStep = ({ onBack }) => {
       return
     }
 
-    toast.success("Order placed successfully! 🎉")
-    clearCart()
-    navigate("/")
+    // Store selected address in localStorage for payment step
+    localStorage.setItem("shoppers-stop-selected-address", JSON.stringify(selectedAddress))
+    
+    // Navigate to payment step
+    onContinue()
   }
 
   const subtotal = getCartTotal()
@@ -494,23 +496,23 @@ const AddressStep = ({ onBack }) => {
               </div>
             </div>
 
-            <Button
-              onClick={handlePlaceOrder}
+<Button
+              onClick={handleContinue}
               variant="primary"
               size="large"
               className="w-full mt-6"
-              icon="CheckCircle"
+              icon="ArrowRight"
               disabled={!selectedAddressId}
             >
-              Place Order
+              Continue to Payment
             </Button>
 
-            <button
+<button
               onClick={onBack}
               className="w-full mt-3 text-sm text-accent hover:text-red-700 transition-colors flex items-center justify-center gap-2"
             >
               <ApperIcon name="ArrowLeft" size={16} />
-              Back to Login
+              Back to Previous Step
             </button>
           </div>
         </div>
