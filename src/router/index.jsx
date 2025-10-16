@@ -1,13 +1,14 @@
-import { createBrowserRouter } from "react-router-dom"
-import { lazy, Suspense } from "react"
-import Layout from "@/components/organisms/Layout"
+import { createBrowserRouter } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+import Layout from "@/components/organisms/Layout";
 
-const HomePage = lazy(() => import("@/components/pages/HomePage"))
-const CategoryPage = lazy(() => import("@/components/pages/CategoryPage"))
-const ProductDetailPage = lazy(() => import("@/components/pages/ProductDetailPage"))
-const CartPage = lazy(() => import("@/components/pages/CartPage"))
-const WishlistPage = lazy(() => import("@/components/pages/WishlistPage"))
-const NotFound = lazy(() => import("@/components/pages/NotFound"))
+const HomePage = lazy(() => import("@/components/pages/HomePage"));
+const CategoryPage = lazy(() => import("@/components/pages/CategoryPage"));
+const ProductDetailPage = lazy(() => import("@/components/pages/ProductDetailPage"));
+const CartPage = lazy(() => import("@/components/pages/CartPage"));
+const CheckoutPage = lazy(() => import("@/components/pages/CheckoutPage"));
+const WishlistPage = lazy(() => import("@/components/pages/WishlistPage"));
+const NotFound = lazy(() => import("@/components/pages/NotFound"));
 
 const mainRoutes = [
   {
@@ -35,11 +36,19 @@ const mainRoutes = [
       </Suspense>
     )
   },
-  {
+{
     path: "cart",
     element: (
       <Suspense fallback={<div>Loading.....</div>}>
         <CartPage />
+      </Suspense>
+    )
+  },
+  {
+    path: "checkout",
+    element: (
+      <Suspense fallback={<div>Loading.....</div>}>
+        <CheckoutPage />
       </Suspense>
     )
   },
@@ -67,6 +76,6 @@ const routes = [
     element: <Layout />,
     children: mainRoutes
   }
-]
+];
 
-export const router = createBrowserRouter(routes)
+export const router = createBrowserRouter(routes);

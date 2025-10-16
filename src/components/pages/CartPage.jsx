@@ -21,11 +21,8 @@ const CartPage = () => {
   } = useCart()
 
   const handleCheckout = () => {
-    toast.success("Order placed successfully! 🎉")
-    clearCart()
-    navigate("/")
+    navigate("/checkout")
   }
-
   if (isLoading) {
     return <Loading />
   }

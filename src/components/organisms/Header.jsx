@@ -1,14 +1,16 @@
-import React, { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import ApperIcon from "@/components/ApperIcon"
-import SearchBar from "@/components/molecules/SearchBar"
-import useCart from "@/hooks/useCart"
-import useWishlist from "@/hooks/useWishlist"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import CartPanel from "@/components/organisms/CartPanel";
+import ApperIcon from "@/components/ApperIcon";
+import SearchBar from "@/components/molecules/SearchBar";
+import useCart from "@/hooks/useCart";
+import useWishlist from "@/hooks/useWishlist";
 
 const Header = () => {
-  const [isBannerVisible, setIsBannerVisible] = useState(
+const [isBannerVisible, setIsBannerVisible] = useState(
     localStorage.getItem("shoppers-stop-banner-dismissed") !== "true"
   )
+  const [cartPanelOpen, setCartPanelOpen] = useState(false)
   const navigate = useNavigate()
   const { getCartItemsCount } = useCart()
   const { getWishlistItemsCount } = useWishlist()
@@ -88,8 +90,8 @@ const Header = () => {
               </button>
 
               {/* Shopping Cart */}
-              <button
-                onClick={() => navigate("/cart")}
+<button
+                onClick={() => setCartPanelOpen(true)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors group relative"
               >
                 <ApperIcon name="ShoppingCart" size={20} className="text-primary group-hover:text-accent" />
@@ -108,6 +110,7 @@ const Header = () => {
       <div className="md:hidden px-4 pb-3 bg-surface">
         <SearchBar />
       </div>
+<CartPanel isOpen={cartPanelOpen} onClose={() => setCartPanelOpen(false)} />
     </div>
   )
 }
