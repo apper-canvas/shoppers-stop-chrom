@@ -1,13 +1,13 @@
-import addressesData from "@/services/mockData/addresses.json"
+// Address service using localStorage for persistence
 import authService from "@/services/api/authService"
 
 const STORAGE_KEY = "user_addresses"
 
 class AddressService {
-  constructor() {
-    // Initialize addresses from JSON if not in localStorage
+constructor() {
+    // Initialize addresses with empty array if not in localStorage
     if (!localStorage.getItem(STORAGE_KEY)) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(addressesData))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([]))
     }
   }
 
