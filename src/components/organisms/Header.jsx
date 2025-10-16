@@ -72,7 +72,7 @@ const [isBannerVisible, setIsBannerVisible] = useState(
               </button>
 
               {/* User Account */}
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors group">
+<button className="p-2 hover:bg-gray-100 rounded-lg transition-colors group">
                 <ApperIcon name="User" size={20} className="text-primary group-hover:text-accent" />
               </button>
 
