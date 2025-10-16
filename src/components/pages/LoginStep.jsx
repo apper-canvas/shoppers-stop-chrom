@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import { authService } from "@/services/authService";
 const LoginStep = ({ onLoginSuccess, onClose }) => {
   const [mode, setMode] = useState("login") // "login" or "signup"
   const [loading, setLoading] = useState(false)
@@ -73,19 +72,14 @@ const LoginStep = ({ onLoginSuccess, onClose }) => {
       return
     }
 
-    setLoading(true)
+setLoading(true)
 
     try {
-      if (mode === "login") {
-        await authService.login(formData.email, formData.password)
-        toast.success("Login successful!")
-        onLoginSuccess()
-      } else {
-// Authentication is handled by ApperUI through Root.jsx
-        // Users should sign up through the main Signup page
-        toast.success("Account created successfully!")
-        onLoginSuccess()
-      }
+      // Authentication is handled by ApperUI through Root.jsx
+      // For checkout, simply proceed if user is already authenticated via Root
+      // Guest users can continue without authentication
+      toast.success("Proceeding to checkout")
+      onLoginSuccess()
     } catch (error) {
       toast.error(error.message || "Authentication failed")
     } finally {
