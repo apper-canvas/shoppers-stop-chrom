@@ -1,5 +1,3 @@
-import authService from "@/services/api/authService";
-
 // Address service using localStorage for persistence
 
 const STORAGE_KEY = "user_addresses"
@@ -25,16 +23,15 @@ constructor() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(addresses))
   }
 
-  async getAll() {
+async getAll(userId) {
     await this.delay(300)
 
-    const currentUser = authService.getCurrentUser()
-    if (!currentUser) {
-      throw new Error("User not authenticated")
+    if (!userId) {
+      throw new Error("User ID is required")
     }
 
-    const allAddresses = this.getAddresses()
-    return allAddresses.filter(addr => addr.userId === currentUser.Id)
+    const addresses = this.getAddresses()
+    return addresses.filter(addr => addr.userId === userId)
   }
 
   async getById(id) {
@@ -54,12 +51,11 @@ constructor() {
     return { ...address }
   }
 
-  async create(addressData) {
+async create(addressData, userId) {
     await this.delay(400)
 
-    const currentUser = authService.getCurrentUser()
-    if (!currentUser) {
-      throw new Error("User not authenticated")
+    if (!userId) {
+      throw new Error("User ID is required")
     }
 
     // Validation
@@ -83,16 +79,16 @@ constructor() {
     const addresses = this.getAddresses()
     const newId = addresses.length > 0 ? Math.max(...addresses.map(a => a.Id)) + 1 : 1
 
-    const newAddress = {
+const newAddress = {
       Id: newId,
-      userId: currentUser.Id,
+      userId: userId,
       name: addressData.name.trim(),
       mobile: addressData.mobile.trim(),
       pincode: addressData.pincode.trim(),
       address: addressData.address.trim(),
       city: addressData.city.trim(),
       state: addressData.state.trim(),
-      isDefault: addresses.filter(a => a.userId === currentUser.Id).length === 0
+      isDefault: addresses.filter(a => a.userId === userId).length === 0
     }
 
     addresses.push(newAddress)
