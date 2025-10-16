@@ -8,6 +8,8 @@ import { getApperClient } from "@/services/apperClient"
 // Auth context for logout functionality
 const AuthContext = createContext(null)
 
+export { AuthContext }
+
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
