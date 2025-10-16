@@ -56,7 +56,7 @@ const createRoute = ({
 
 const mainRoutes = [
     createRoute({
-        path: "",
+        path: "/",
         index: true,
         element: (
             <HomePage />
