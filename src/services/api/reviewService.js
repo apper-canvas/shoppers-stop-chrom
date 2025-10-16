@@ -1,13 +1,12 @@
-import reviewsData from "@/services/mockData/reviews.json"
 
 class ReviewService {
   constructor() {
     this.reviews = this.loadReviews()
   }
 
-  loadReviews() {
+loadReviews() {
     const stored = localStorage.getItem('reviews')
-    return stored ? JSON.parse(stored) : [...reviewsData]
+    return stored ? JSON.parse(stored) : []
   }
 
   saveReviews() {
