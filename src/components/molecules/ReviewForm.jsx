@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import ApperIcon from '@/components/ApperIcon'
-import Button from '@/components/atoms/Button'
-import Input from '@/components/atoms/Input'
-import StarRating from '@/components/atoms/StarRating'
-import { toast } from 'react-toastify'
-import reviewService from '@/services/api/reviewService'
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import reviewService from "@/services/api/reviewService";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
+import StarRating from "@/components/atoms/StarRating";
 
 const ReviewForm = ({ productId, onSuccess }) => {
   const [rating, setRating] = useState(0)
@@ -46,7 +46,7 @@ const ReviewForm = ({ productId, onSuccess }) => {
         images: images
       }
 
-      reviewService.create(review)
+await reviewService.create(review)
       
       toast.success('Review submitted successfully!')
       
@@ -63,7 +63,16 @@ const ReviewForm = ({ productId, onSuccess }) => {
       setLoading(false)
     }
   }
+const resetForm = () => {
+    setRating(0);
+    setTitle('');
+    setText('');
+  };
 
+  const handleCancel = () => {
+    resetForm();
+    toast.success('Review form cleared');
+  };
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files)
     
@@ -177,15 +186,25 @@ const ReviewForm = ({ productId, onSuccess }) => {
           )}
         </div>
 
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          variant="primary"
-          className="w-full"
-          disabled={loading}
-        >
-          {loading ? 'Submitting...' : 'Submit Review'}
-        </Button>
+{/* Action Buttons */}
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            className="flex-1"
+            disabled={loading}
+          >
+            {loading ? 'Submitting...' : 'Submit Review'}
+          </Button>
+        </div>
       </form>
     </div>
   )
