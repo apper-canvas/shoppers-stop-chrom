@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import { Suspense, lazy } from "react"
 import Root from "@/layouts/Root"
 import Layout from "@/components/organisms/Layout"
+import { getRouteConfig } from "./route.utils";
 
 const HomePage = lazy(() => import("@/components/pages/HomePage"))
 const CategoryPage = lazy(() => import("@/components/pages/CategoryPage"))
@@ -17,129 +18,163 @@ const ResetPassword = lazy(() => import("@/components/pages/ResetPassword"))
 const PromptPassword = lazy(() => import("@/components/pages/PromptPassword"))
 const NotFound = lazy(() => import("@/components/pages/NotFound"))
 
+// Route builder utility
+const createRoute = ({
+    path,
+    index,
+    element,
+    access,
+    children,
+    ...meta
+}) => {
+    // Get config for this route
+    let configPath;
+    if (index) {
+        configPath = "/";
+    } else {
+        configPath = path.startsWith('/') ? path : `/${path}`;
+    }
+
+    const config = getRouteConfig(configPath);
+    const finalAccess = access || config.allow;
+
+    const route = {
+        ...(index ? { index: true } : { path }),
+        element: element ? { element } : element,
+        handle: {
+            access: finalAccess,
+            ...meta,
+        },
+    };
+
+    if (children && children.length > 0) {
+        route.children = children;
+    }
+
+    return route;
+};
+
 const mainRoutes = [
-  {
-    path: "",
-    index: true,
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <HomePage />
-      </Suspense>
-    )
-  },
-  {
-    path: "category/:categoryName",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <CategoryPage />
-      </Suspense>
-    )
-  },
-  {
-    path: "product/:productId",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <ProductDetailPage />
-      </Suspense>
-    )
-  },
-  {
-    path: "cart",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <CartPage />
-      </Suspense>
-    )
-  },
-  {
-    path: "checkout",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <CheckoutPage />
-      </Suspense>
-    )
-  },
-  {
-    path: "wishlist",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <WishlistPage />
-      </Suspense>
-    )
-  },
-  {
-    path: "*",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <NotFound />
-      </Suspense>
-    )
-  }
+    createRoute({
+        path: "",
+        index: true,
+        element: (
+            <HomePage />
+        )
+    }),
+    createRoute({
+        path: "category/:categoryName",
+        element: (
+
+            <CategoryPage />
+
+        )
+    }),
+    createRoute({
+        path: "product/:productId",
+        element: (
+
+            <ProductDetailPage />
+
+        )
+    }),
+    createRoute({
+        path: "cart",
+        element: (
+
+            <CartPage />
+
+        )
+    }),
+    createRoute({
+        path: "checkout",
+        element: (
+
+            <CheckoutPage />
+
+        )
+    }),
+    createRoute({
+        path: "wishlist",
+        element: (
+
+            <WishlistPage />
+
+        )
+    }),
+    createRoute({
+        path: "*",
+        element: (
+
+            <NotFound />
+
+        )
+    })
 ]
 
 const authRoutes = [
-  {
-    path: "login",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <Login />
-      </Suspense>
-    )
-  },
-  {
-    path: "signup",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <Signup />
-      </Suspense>
-    )
-  },
-  {
-    path: "callback",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <Callback />
-      </Suspense>
-    )
-  },
-  {
-    path: "error",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <ErrorPage />
-      </Suspense>
-    )
-  },
-  {
-    path: "reset-password/:appId/:fields",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <ResetPassword />
-      </Suspense>
-    )
-  },
-  {
-    path: "prompt-password/:appId/:emailAddress/:provider",
-    element: (
-      <Suspense fallback={<div>Loading.....</div>}>
-        <PromptPassword />
-      </Suspense>
-    )
-  }
+    createRoute({
+        path: "login",
+        element: (
+
+            <Login />
+
+        )
+    }),
+    createRoute({
+        path: "signup",
+        element: (
+
+            <Signup />
+
+        )
+    }),
+    createRoute({
+        path: "callback",
+        element: (
+
+            <Callback />
+
+        )
+    }),
+    createRoute({
+        path: "error",
+        element: (
+
+            <ErrorPage />
+
+        )
+    }),
+    createRoute({
+        path: "reset-password/:appId/:fields",
+        element: (
+
+            <ResetPassword />
+
+        )
+    }),
+    createRoute({
+        path: "prompt-password/:appId/:emailAddress/:provider",
+        element: (
+
+            <PromptPassword />
+
+        )
+    })
 ]
 
 const routes = [
-  {
-    path: "/",
-    element: <Root />,
-    children: [
-      {
+    createRoute({
         path: "/",
-        element: <Layout />,
-        children: mainRoutes
-      },
-      ...authRoutes
-    ]
-  }
+        element: <Root />,
+        children: [
+            {
+                path: "/",
+                element: <Layout />,
+                children: mainRoutes
+            },
+            ...authRoutes
+        ]
+    })
 ]
 export const router = createBrowserRouter(routes);
