@@ -6,7 +6,7 @@ import reviewService from "@/services/api/reviewService";
 import ApperIcon from "@/components/ApperIcon";
 import Loading from "@/components/ui/Loading";
 import Button from "@/components/atoms/Button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 
 const ReviewsSection = ({ productId }) => {
   const [reviews, setReviews] = useState([])
