@@ -1,10 +1,9 @@
-import React, { useState } from "react"
-import Button from "@/components/atoms/Button"
-import Input from "@/components/atoms/Input"
-import ApperIcon from "@/components/ApperIcon"
-import authService from "@/services/api/authService"
-import { toast } from "react-toastify"
-
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
+import { authService } from "@/services/authService";
 const LoginStep = ({ onLoginSuccess, onClose }) => {
   const [mode, setMode] = useState("login") // "login" or "signup"
   const [loading, setLoading] = useState(false)
@@ -82,12 +81,8 @@ const LoginStep = ({ onLoginSuccess, onClose }) => {
         toast.success("Login successful!")
         onLoginSuccess()
       } else {
-        await authService.signup(
-          formData.name,
-          formData.email,
-          formData.password,
-          formData.confirmPassword
-        )
+// Authentication is handled by ApperUI through Root.jsx
+        // Users should sign up through the main Signup page
         toast.success("Account created successfully!")
         onLoginSuccess()
       }
